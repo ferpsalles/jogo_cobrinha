@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Jogo da Cobrinha</title>
+   
+</head>
+<body>
+
+    <canvas id="stage" width="600" height="600"> </canvas>
+
+    <script type="text/javascript">
+    
+        window.onload = function(){
+            var stage = document.getElementById('stage');
+            var ctx = stage.getContext("2d");
+            document.addEventListener("keydown", keyPush); //pressionar tecla
+
+            setInterval(game, 80); //a cada mil milisegundos chama a função no jogo
+            
+            const velocidade = 1; // andar 1 quadrado
+
+            var velocidadex = velocidadey = 0;
+            var pontox = 10; //cabeça da cobra
+            var pontoy = 15;
+            var tamanhop = 30;
+            var quantidadep = 20;
+            var ax = ay =15;
+
+            var trail = [] //nenhum elemento no rastro
+            tail = 5;
+
+            
+            function game (){
+
+                pontox += velocidadex;
+                pontoy += velocidadey;
+
+                if (pontox <0){
+                    pontox = quantidadep-1;
+                }
+
+                if (pontox > quantidadep-1){
+                    pontox = 0;
+                }
+
+                if (pontoy <0){
+                    pontoy = quantidadep-1;
+                }
+
+                if (pontoy > quantidadep-1){
+                    pontoy = 0;
+                }
+            ctx.fillStyle = "black";
+            ctx.fillRect(0,0,stage.width, stage.height);  
+
+
+            ctx.fillStyle = "red";
+            ctx.fillRect(ax*tamanhop, ay*tamanhop, tamanhop, tamanhop);
+            
+            ctx.fillStyle= "gray";
+            for (var i = 0; i <trail.length; i++){
+                ctx.fillRect(trail[i].x*tamanhop, trail[i].y*tamanhop, tamanhop-1, tamanhop-1);
+                if (trail[i].x == pontox && trail[i].y == pontoy){
+                    velocidadex = velocidadey = 0;
+                    tail=5;
+                }
+            }
+
+            trail.push({x: pontox, y: pontoy}) // desenhar o rastro na tela
+            while (trail.length > tail){ // tirar a ultima posicao
+                trail.shift(); // tirar o primeiro elemento do array
+            }
+
+            if (ax ==pontox  && ay ==pontoy){ // colocar um elemento
+                tail++;
+                ax = Math.floor (Math.random()*quantidadep);
+                ay = Math.floor (Math.random()*quantidadep);
+             }
+
+
+         }
+
+         function keyPush (event){// função qual tecla foi precionada 
+             switch (event.keyCode){ 
+                 case 37: //Left
+                    velocidadex = -velocidade;
+                    velocidadey = 0;
+                 break;
+
+                 case 38: //Up
+                    velocidadex = 0;
+                    velocidadey = -velocidade;
+                 break;
+
+                 case 39: //Right
+                    velocidadex = velocidade;
+                    velocidadey = 0;
+                 break;
+
+                 case 40: //Down
+                    velocidadex = 0;
+                    velocidadey = velocidade;
+                 break;
+
+                 default:
+
+                 break;
+
+             }
+
+         }
+           
+        }
+    
+    
+    
+    </script>
+    
+</body>
+</html>
